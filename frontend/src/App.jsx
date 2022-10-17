@@ -1,15 +1,19 @@
 import { useContext } from "react"
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 import { AuthContext } from "./contexts/AuthContext"
+
+// https://stackoverflow.com/questions/45422409/handling-jwt-token-expiration-in-a-react-based-application
 
 const App = () => {
     const { user, dispatch } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     function logout() {
         dispatch({
             type: 'LOGOUT'
         })
         localStorage.removeItem('user')
+        navigate('/')
     }
 
     return (
@@ -18,7 +22,7 @@ const App = () => {
                 <Link to="/">Home</Link>
                 {user && (
                     <div>
-                        <Link className="userLink">{user.username}</Link>
+                        <Link to="/user" className="userLink">{user.username}</Link>
                         <button onClick={logout}>Logout</button>
                     </div>
                 )}
