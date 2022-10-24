@@ -2,7 +2,17 @@ import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
 
-const Survey = ({ survey, setSurvey, setError }) => {
+const Survey = ({ survey }) => {
+    return (
+        <div>
+            <p>{ survey.title }</p>
+            <p>State: { survey.state }</p>
+            { survey.state === 'closed' && <Link to={`/result/${survey._id}`}>View results</Link> }
+        </div>
+    )
+}
+
+const UserSurvey = ({ survey, setSurvey, setError }) => {
     const { user } = useContext(AuthContext)
     const [disabled, setDisabled] = useState(false)
 
@@ -54,11 +64,73 @@ const Survey = ({ survey, setSurvey, setError }) => {
     return (
         <div>
             <p>{ survey.title }</p>
-            <p>State: { survey.state }</p>
             { survey.state === 'saved' && <Link to={`/edit-survey/${survey._id}`}>Edit survey</Link> }
             { survey.state === 'saved' && <button onClick={openSurvey} disabled={disabled}>Open survey</button> }
             { survey.state === 'open' && <button onClick={closeSurvey} disabled={disabled}>Close survey</button> }
             { survey.state === 'closed' && <Link to={`/result/${survey._id}`}>View results</Link> }
+        </div>
+    )
+}
+
+const SurveyLists = ({ surveys, setSurveys, setError }) => {
+    if (surveys === null) {
+        return null
+    }
+
+    const saved = surveys.created.filter(survey => survey.state === 'saved')
+    const open = surveys.created.filter(survey => survey.state === 'open')
+    const closed = surveys.created.filter(survey => survey.state === 'closed')
+
+    function setSurvey(newSurvey) {
+        const created = surveys.created.map(survey => {
+            if (survey._id === newSurvey._id) {
+                return newSurvey
+            }
+            else {
+                return survey
+            }
+        })
+
+        const submitted = surveys.submitted.map(survey => {
+            if (survey._id === newSurvey._id) {
+                return newSurvey
+            }
+            else {
+                return survey
+            }
+        })
+
+        setSurveys({ created, submitted })
+    }
+
+    return (
+        <div>
+            { saved.length > 0 && (
+                <div>
+                    <p>Saved</p>
+                    { saved.map(survey => <UserSurvey survey={survey} setSurvey={setSurvey} setError={setError} key={survey._id}/>) }
+                </div>
+            )}
+            { open.length > 0 && (
+                <div>
+                    <p>Open</p>
+                    { open.map(survey => <UserSurvey survey={survey} setSurvey={setSurvey} setError={setError} key={survey._id}/>) }
+                </div>
+            )}
+            { closed.length > 0 && (
+                <div>
+                    <p>Closed</p>
+                    { closed.map(survey => <UserSurvey survey={survey} setSurvey={setSurvey} setError={setError} key={survey._id}/>) }
+                </div>
+            )}
+            { surveys.submitted.length > 0 && (
+                <div>
+                    <p>Submitted</p>
+                    {
+                        surveys.submitted.map(survey => <Survey survey={survey} key={survey._id}/>) 
+                    }
+                </div>
+            )}
         </div>
     )
 }
@@ -77,7 +149,7 @@ const User = () => {
 
     useEffect(() => {
         async function fetchSurveys() {
-            if (user && user.isCoordinator) {
+            if (user) {
                 setSurveys(null)
                 try {
                     const response = await fetch('/api/survey', {
@@ -117,11 +189,7 @@ const User = () => {
         <div>
             { user.isCoordinator && <Link to='/create-survey'>Create survey</Link>}
             { error && <p>{error}</p> }
-            { surveys !== null && (
-                <ul>
-                    { surveys.map((survey, index) => <Survey key={survey._id} survey={survey} setSurvey={(survey) => { setSurveys([...surveys.slice(0,index), survey, ...surveys.slice(index+1)]) }} setError={setError}/>) }
-                </ul>
-            )}
+            <SurveyLists surveys={surveys} setSurveys={setSurveys} setError={setError} />
         </div>
     )
 }

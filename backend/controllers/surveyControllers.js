@@ -1,6 +1,7 @@
 const { getUserId } = require('../middleware/requireAuth')
 const Survey = require('../models/surveyModel')
 const User = require('../models/userModel')
+const Response = require('../models/responseModel')
 const asyncHandler = require('express-async-handler')
 
 const getSurveys = asyncHandler(async (req, res) => {
@@ -12,16 +13,21 @@ const getSurveys = asyncHandler(async (req, res) => {
                     })
     }
 
-    if (!user.isCoordinator) {
-        return res.status(403)
-                    .json({
-                        error: 'Unauthorized - you are not a coordinator'
-                    })
-    }
-
-    const surveys = await Survey.find({ creator: req.userId }, 'title state creator')
+    const created = await Survey.find({ creator: req.userId }, 'title state')
+    let submitted = await Response.find({ user: req.userId }, 'survey').populate('survey', 'title state')
+    submitted = submitted.map(survey => survey.survey)
     
-    return res.status(200).json(surveys)
+    return res.status(200).json({ created, submitted })
+})
+
+const getOpenSurveys = asyncHandler(async (req, res) => {
+    const openSurveys = await Survey.find({ state: 'open' }, 'title state')
+    return res.status(200).json(openSurveys)
+})
+
+const getClosedSurveys = asyncHandler(async (req, res) => {
+    const closedSurveys = await Survey.find({ state: 'closed' }, 'title state')
+    return res.status(200).json(closedSurveys)
 })
 
 const getSurvey = asyncHandler(async (req, res) => {
@@ -179,4 +185,4 @@ const updateSurvey = asyncHandler(async (req, res) => {
     res.status(200).json(survey)
 })
 
-module.exports = { getSurveys, getSurvey, createSurvey, updateSurvey }
+module.exports = { getSurveys, getOpenSurveys, getClosedSurveys, getSurvey, createSurvey, updateSurvey }
