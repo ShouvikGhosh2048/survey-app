@@ -136,14 +136,21 @@ const updateSurvey = asyncHandler(async (req, res) => {
 
     let { title, questions, state } = req.body
     
-    // Only allow state change if the survey is open or closed.
-    if (survey.state === 'open' || survey.state === 'closed') {
-        if (state === 'open' || state === 'closed') {
+    // No changes allowed if the survey is closed.
+    if (survey.state === 'closed') {
+        return res.status(400).json({
+            error: "The survey is closed and can't be edited"
+        })
+    }
+
+    // If the survey is open, only allow closing the survey.
+    if (survey.state === 'open') {
+        if (state === 'closed') {
             survey = await Survey.findByIdAndUpdate(survey.id, { state })
             return res.status(200).json(survey)
         } else {
             return res.status(400).json({
-                error: `The survey is currently ${survey.state}. It only allows state changes.`
+                error: 'The survey is currently open and only allows closing'
             })
         }
     }

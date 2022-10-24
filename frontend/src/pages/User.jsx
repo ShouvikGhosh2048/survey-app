@@ -39,7 +39,6 @@ const Survey = ({ survey, setSurvey, setError }) => {
                 }
             }
         } catch(err) {
-            console.log(err)
             setDisabled(false)
         }
     }
@@ -56,8 +55,10 @@ const Survey = ({ survey, setSurvey, setError }) => {
         <div>
             <p>{ survey.title }</p>
             <p>State: { survey.state }</p>
-            <Link to={`/edit-survey/${survey._id}`}>Edit survey</Link>
-            <button onClick={survey.state === 'open' ? closeSurvey : openSurvey} disabled={disabled}>{survey.state === 'open' ? 'Close survey' : 'Open survey'}</button>
+            { survey.state === 'saved' && <Link to={`/edit-survey/${survey._id}`}>Edit survey</Link> }
+            { survey.state === 'saved' && <button onClick={openSurvey} disabled={disabled}>Open survey</button> }
+            { survey.state === 'open' && <button onClick={closeSurvey} disabled={disabled}>Close survey</button> }
+            { survey.state === 'closed' && <Link to={`/result/${survey._id}`}>View results</Link> }
         </div>
     )
 }

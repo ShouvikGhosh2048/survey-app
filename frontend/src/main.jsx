@@ -9,6 +9,8 @@ import Signup from './pages/Signup'
 import User from './pages/User'
 import CreateSurvey from './pages/CreateSurvey'
 import EditSurvey from './pages/EditSurvey'
+import CreateResponse from './pages/CreateResponse'
+import Result from './pages/Result'
 import { AuthContextProvider } from './contexts/AuthContext'
 
 const router = 
@@ -20,6 +22,8 @@ const router =
           <Route path="/login" element={<Login/>}/>
           <Route path="/user" element={<User />}/>
           <Route path="/create-survey" element={<CreateSurvey />}/>
+          <Route path="/create-response/:surveyId" element={<CreateResponse />}/>
+          <Route path="/result/:surveyId" element={<Result />}/>
           <Route path="/edit-survey/:surveyId" element={<EditSurvey />}/>
         </Route>
       )
