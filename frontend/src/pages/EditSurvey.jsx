@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import EditSurveyForm from "../components/EditSurveyForm"
 import { AuthContext } from "../contexts/AuthContext"
 
@@ -104,6 +104,7 @@ const EditSurvey = () => {
 
     return (
         <div>
+            <Link to="/user">Cancel</Link>
             { error && <p>{error}</p> }
             { survey && <EditSurveyForm survey={survey} setSurvey={setSurvey} saveSurvey={saveSurvey} disabled={disabled}/> }
         </div>

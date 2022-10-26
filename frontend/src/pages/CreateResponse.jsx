@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
 
 const ResponseChoice = ({ question, choice, setChoice, disabled, index }) => {
@@ -196,6 +196,7 @@ const CreateResponse = () => {
 
     return (
         <div>
+            <Link to="/user">Cancel</Link>
             { error && <p>{error}</p> }
             { survey && <CreateResponseForm survey={survey} response={response} setResponse={setResponse} submitResponse={submitResponse} disabled={disabled}/> }
         </div>

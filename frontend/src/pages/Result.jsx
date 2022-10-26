@@ -6,7 +6,24 @@ const QuestionResult = ({ question, counts, index }) => {
         <div>
             <p>Question {index + 1}</p>
             <p>{ question.text }</p>
-            { question.choices.map((choice, index) => <p key={index}>{counts[index]} response{counts[index] !== 1 && 's'} - {choice}</p>)}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Choice</th>
+                        <th>Number of responses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { question.choices.map((choice, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{ choice }</td>
+                                    <td>{ counts[index] }</td>
+                                </tr>
+                            )
+                    })}
+                </tbody>
+            </table>
         </div>
     )
 }
