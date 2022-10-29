@@ -1,15 +1,20 @@
-const EditChoice = ({ choice, setChoice, index, deleteChoice }) => {
+const EditChoice = ({ choice, setChoice, index, deleteChoice, disabled }) => {
     return (
-        <div>
-            <label>Choice {index + 1}</label>
-            <input type="text" value={choice} onChange={(e) => {setChoice(e.target.value)}}/>
-            <button onClick={deleteChoice}>Delete</button>
+        <div className="editFormChoice">
+            <span>
+                <label>{(index + 1) + ') '}</label>
+                <input type="text" value={choice} onChange={(e) => {setChoice(e.target.value)}} placeholder="Choice" disabled={disabled}/>
+            </span>
+            <button onClick={deleteChoice} disabled={disabled}>Delete</button>
         </div>
     )
 }
 
-const EditQuestion = ({ question, setQuestion, index, deleteQuestion }) => {
+const EditQuestion = ({ question, setQuestion, index, deleteQuestion, disabled }) => {
     function addChoice() {
+        if (disabled) {
+            return
+        }
         if (question.choices.length === 5) {
             return
         }
@@ -21,6 +26,9 @@ const EditQuestion = ({ question, setQuestion, index, deleteQuestion }) => {
 
     function mapChoice(choice, index) {
         function setChoice(choice) {
+            if (disabled) {
+                return
+            }
             setQuestion({
                 ...question,
                 choices: [...question.choices.slice(0,index), choice, ...question.choices.slice(index + 1)]
@@ -28,32 +36,43 @@ const EditQuestion = ({ question, setQuestion, index, deleteQuestion }) => {
         }
 
         function deleteChoice() {
+            if (disabled) {
+                return
+            }
             setQuestion({
                 ...question, 
                 choices: [...question.choices.slice(0,index), ...question.choices.slice(index + 1)]
             })
         }
 
-        return <EditChoice choice={choice} setChoice={setChoice} deleteChoice={deleteChoice} key={index} index={index}/>
+        return <EditChoice choice={choice} setChoice={setChoice} deleteChoice={deleteChoice} key={index} index={index} disabled={disabled}/>
     }
 
     return (
-        <div>
-            <p>Question {index + 1} <button onClick={deleteQuestion}>Delete question</button></p>
+        <div className="editFormQuestion">
             { question.errors && (
                 <ul>
                     { question.errors.map((error, index) => <li key={index}>{error}</li>) }
                 </ul>
             )}
-            <input type="text" placeholder="Question" value={question.text} onChange={(e) => {setQuestion({ ...question, text: e.target.value})}}/>
-            <button onClick={addChoice}>Add choice</button>
-            { question.choices.map(mapChoice) }
+            <p>Question {index + 1}</p>
+            <input type="text" placeholder="Question" value={question.text} onChange={(e) => {setQuestion({ ...question, text: e.target.value})}} disabled={disabled}/>
+            <div className="editFormQuestionControls">
+                <button onClick={addChoice} disabled={disabled}>Add choice</button>
+                <button onClick={deleteQuestion} disabled={disabled}>Delete question</button>
+            </div>
+            <div>
+                { question.choices.map(mapChoice) }
+            </div>
         </div>
     )
 }
 
 const EditSurveyForm = ({ survey, setSurvey, saveSurvey, disabled }) => {
     function addQuestion() {
+        if (disabled) {
+            return
+        }
         if (survey.questions.length === 10) {
             return
         }
@@ -67,6 +86,9 @@ const EditSurveyForm = ({ survey, setSurvey, saveSurvey, disabled }) => {
     }
 
     function onSave() {
+        if (disabled) {
+            return
+        }
         let fieldErrorsExist = false
 
         let newSurvey = {}
@@ -126,6 +148,10 @@ const EditSurveyForm = ({ survey, setSurvey, saveSurvey, disabled }) => {
 
     function mapQuestion(question, index) {
         function setQuestion(question) {
+            if (disabled) {
+                return
+            }
+            
             setSurvey({ 
                 ...survey, 
                 questions: [...survey.questions.slice(0,index), question, ...survey.questions.slice(index + 1)] 
@@ -133,26 +159,36 @@ const EditSurveyForm = ({ survey, setSurvey, saveSurvey, disabled }) => {
         }
 
         function deleteQuestion() {
+            if (disabled) {
+                return
+            }
+
             setSurvey({ 
                 ...survey, 
                 questions: [...survey.questions.slice(0,index), ...survey.questions.slice(index + 1)] 
             })
         }
 
-        return <EditQuestion question={question} setQuestion={setQuestion} deleteQuestion={deleteQuestion} key={index} index={index}/>
+        return <EditQuestion question={question} setQuestion={setQuestion} deleteQuestion={deleteQuestion} key={index} index={index} disabled={disabled}/>
     }
 
     return (
-        <div>
-            { survey.errors && (
-                <ul>
-                    { survey.errors.map((error, index) => <li key={index}>{error}</li>) }
-                </ul>
-            ) }
-            <input type="text" value={survey.title} onChange={(e) => { setSurvey({ ...survey, title: e.target.value }) }}/>
-            <button onClick={addQuestion}>Add a question</button>
+        <div className="editSurveyForm">
+            <div>
+                { survey.errors && (
+                    <ul>
+                        { survey.errors.map((error, index) => <li key={index}>{error}</li>) }
+                    </ul>
+                ) }
+                <div className="surveyTitleAndNewQuestion">
+                    <input type="text" value={survey.title} onChange={(e) => { setSurvey({ ...survey, title: e.target.value }) }} placeholder="Survey title" disabled={disabled}/>
+                    <button onClick={addQuestion} disabled={disabled}>Add a question</button>
+                </div>
+            </div>
             { survey.questions.map(mapQuestion) }
-            <button onClick={onSave} disabled={disabled}>Save</button>
+            <div className="editFormSaveContainer">
+                <button onClick={onSave} disabled={disabled}>Save</button>
+            </div>
         </div>
     )
 }

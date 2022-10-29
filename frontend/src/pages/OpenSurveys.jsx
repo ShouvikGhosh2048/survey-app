@@ -34,9 +34,11 @@ const OpenSurveys = () => {
     }, [])
 
     return (
-        <div>
+        <div className="openSurveysPage">
             { error && <p>{error}</p> }
-            { surveys && surveys.map(survey => <Survey survey={survey} key={survey._id}/>) }
+            <div className="surveyList">
+                { surveys && surveys.map(survey => <Survey survey={survey} key={survey._id}/>) }
+            </div>
         </div>
     )
 }

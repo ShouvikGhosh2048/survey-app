@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom"
 
 const QuestionResult = ({ question, counts, index }) => {
     return (
-        <div>
-            <p>Question {index + 1}</p>
-            <p>{ question.text }</p>
+        <div className="questionResult">
+            <p>{ (index + 1) + ') ' + question.text }</p>
             <table>
                 <thead>
                     <tr>
@@ -62,7 +61,7 @@ const Result = () => {
     }
 
     return (
-        <div>
+        <div className="resultsPage">
             <p>{ result.survey.title }</p>
             <p>Total number of submissions: { result.numberOfSubmissions }</p>
             { result.survey.questions.map((question, index) => <QuestionResult question={question} counts={result.counts[index]} index={index} key={question._id}/>) }

@@ -4,10 +4,9 @@ import { AuthContext } from "../contexts/AuthContext"
 
 const ResponseChoice = ({ question, choice, setChoice, disabled, index }) => {
     return (
-        <div>
+        <div className="responseChoice">
             { choice.error && <p>{ choice.error }</p>}
-            <p>Question {index + 1}</p>
-            <p>{ question.text }</p>
+            <p>{ (index + 1) + ') ' + question.text }</p>
             { question.choices.map((questionChoice, index) => {
                 return (
                     <div key={index}>
@@ -22,7 +21,8 @@ const ResponseChoice = ({ question, choice, setChoice, disabled, index }) => {
                                             })
                                         }
                                     }
-                                }/>
+                                }
+                                disabled={disabled}/>
                         <label>{ questionChoice }</label>
                     </div>
                 )
@@ -66,7 +66,7 @@ const CreateResponseForm = ({ survey, response, setResponse, submitResponse, dis
             <p>{ survey.title }</p>
             { survey.error && <p>{ survey.error }</p> }
             { survey.questions.map(mapQuestion) }
-            <button onClick={onSubmit}>Submit response</button>
+            <button onClick={onSubmit} disabled={disabled}>Submit response</button>
         </div>
     )
 }
@@ -195,7 +195,7 @@ const CreateResponse = () => {
     }
 
     return (
-        <div>
+        <div className="createResponsePage">
             <Link to="/user">Cancel</Link>
             { error && <p>{error}</p> }
             { survey && <CreateResponseForm survey={survey} response={response} setResponse={setResponse} submitResponse={submitResponse} disabled={disabled}/> }

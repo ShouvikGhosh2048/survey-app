@@ -62,7 +62,7 @@ const UserSurvey = ({ survey, setSurvey, setError }) => {
     }
 
     return (
-        <div>
+        <div className="userSurvey">
             <p>{ survey.title }</p>
             { survey.state === 'saved' && <Link to={`/edit-survey/${survey._id}`}>Edit survey</Link> }
             { survey.state === 'saved' && <button onClick={openSurvey} disabled={disabled}>Open survey</button> }
@@ -106,26 +106,26 @@ const SurveyLists = ({ surveys, setSurveys, setError }) => {
     return (
         <div>
             { saved.length > 0 && (
-                <div>
-                    <p>Saved</p>
+                <div className="surveyList">
+                    <p className="listName">Saved</p>
                     { saved.map(survey => <UserSurvey survey={survey} setSurvey={setSurvey} setError={setError} key={survey._id}/>) }
                 </div>
             )}
             { open.length > 0 && (
-                <div>
-                    <p>Open</p>
+                <div className="surveyList">
+                    <p className="listName">Open</p>
                     { open.map(survey => <UserSurvey survey={survey} setSurvey={setSurvey} setError={setError} key={survey._id}/>) }
                 </div>
             )}
             { closed.length > 0 && (
-                <div>
-                    <p>Closed</p>
+                <div className="surveyList">
+                    <p className="listName">Closed</p>
                     { closed.map(survey => <UserSurvey survey={survey} setSurvey={setSurvey} setError={setError} key={survey._id}/>) }
                 </div>
             )}
             { surveys.submitted.length > 0 && (
-                <div>
-                    <p>Submitted</p>
+                <div className="surveyList">
+                    <p className="listName">Submitted</p>
                     {
                         surveys.submitted.map(survey => <Survey survey={survey} key={survey._id}/>) 
                     }
@@ -186,7 +186,7 @@ const User = () => {
         return null
     }
     return (
-        <div>
+        <div className="userPage">
             { user.isCoordinator && <Link to='/create-survey'>Create survey</Link>}
             { error && <p>{error}</p> }
             <SurveyLists surveys={surveys} setSurveys={setSurveys} setError={setError} />

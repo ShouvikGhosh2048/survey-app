@@ -70,3 +70,94 @@ nav button {
     margin: 10px;
     cursor: pointer;
 }
+
+.editSurveyFormContainer {
+    max-width: 335px;
+    margin: 0px auto;
+}
+
+.editSurveyFormContainer > * {
+    margin: 20px 0;
+}
+
+.editSurveyForm {
+    max-width: 330px;
+    margin: 0px auto;
+}
+
+.editSurveyForm > div {
+    margin-bottom: 30px;
+}
+
+.surveyTitleAndNewQuestion {
+    display: flex;
+    justify-content: space-between;
+}
+
+.questionIndexAndDeleteQuestion {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editFormQuestion > div, p, ul {
+    margin: 10px 0;
+}
+
+.editFormQuestionControls {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editFormChoice {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.editFormSaveContainer {
+    text-align: center;
+}
+
+.listName {
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.userPage, .openSurveysPage, .closedSurveysPage, .homePage, .resultsPage {
+    padding: 10px;
+}
+
+.surveyList {
+    margin: 30px 0;
+}
+
+.surveyList > div {
+    margin: 30px 0;
+}
+
+.responseChoice {
+    margin: 30px 0;
+}
+
+.createResponsePage {
+    padding: 10px;
+    max-width: 330px;
+    margin: 0 auto;
+}
+
+.userSurvey button, .userSurvey a {
+    margin-right: 15px;
+}
+
+.homePageLinks > a {
+    margin-right: 10px;
+}
+
+td, th {
+    text-align: center;
+    padding: 5px;
+}
+
+.questionResult {
+    margin-top: 30px;
+}

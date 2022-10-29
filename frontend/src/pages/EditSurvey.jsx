@@ -103,8 +103,10 @@ const EditSurvey = () => {
     }
 
     return (
-        <div>
-            <Link to="/user">Cancel</Link>
+        <div className="editSurveyFormContainer">
+            <div>
+                <Link to="/user">Cancel</Link>
+            </div>
             { error && <p>{error}</p> }
             { survey && <EditSurveyForm survey={survey} setSurvey={setSurvey} saveSurvey={saveSurvey} disabled={disabled}/> }
         </div>
